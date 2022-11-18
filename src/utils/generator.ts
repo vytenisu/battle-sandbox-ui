@@ -15,8 +15,10 @@ export interface IRoomGenerationProps {
 }
 
 export interface ITerrainGenerationProps {
-  initialMinAmount: number
-  initialMaxAmount: number
+  initialWallMinAmount: number
+  initialWallMaxAmount: number
+  initialSwampMinAmount: number
+  initialSwampMaxAmount: number
   growWallMinAmount: number
   growWallMaxAmount: number
   growSwampMinAmount: number
@@ -34,8 +36,10 @@ export const generateRoom = ({
   room,
   creeps: {ownMinAmount, ownMaxAmount, enemyMinAmount, enemyMaxAmount},
   terrain: {
-    initialMinAmount,
-    initialMaxAmount,
+    initialWallMinAmount,
+    initialWallMaxAmount,
+    initialSwampMinAmount,
+    initialSwampMaxAmount,
     growWallMinAmount,
     growWallMaxAmount,
     growSwampMinAmount,
@@ -46,8 +50,10 @@ export const generateRoom = ({
   const enemyCreepAmount = Random.getInteger(enemyMinAmount, enemyMaxAmount)
 
   const terrain = generateTerrain(
-    initialMinAmount,
-    initialMaxAmount,
+    initialWallMinAmount,
+    initialWallMaxAmount,
+    initialSwampMinAmount,
+    initialSwampMaxAmount,
     growWallMinAmount,
     growWallMaxAmount,
     growSwampMinAmount,
@@ -63,8 +69,10 @@ export const generateRoom = ({
 }
 
 const generateTerrain = (
-  initialAmountMin: number,
-  initialAmountMax: number,
+  initialWallAmountMin: number,
+  initialWallAmountMax: number,
+  initialSwampAmountMin: number,
+  initialSwampAmountMax: number,
   growWallMin: number,
   growWallMax: number,
   growSwampMin: number,
@@ -76,8 +84,8 @@ const generateTerrain = (
   let result = terrain
 
   result = generateInitialTerrain(
-    Math.ceil(initialAmountMin / 2),
-    Math.ceil(initialAmountMax / 2),
+    Math.ceil(initialWallAmountMin),
+    Math.ceil(initialWallAmountMax),
     room,
     objects,
     result,
@@ -87,8 +95,8 @@ const generateTerrain = (
   result = growTerrain(growWallMin, growWallMax, TERRAIN_MASK_WALL, room, objects, result)
 
   result = generateInitialTerrain(
-    Math.ceil(initialAmountMin / 2),
-    Math.ceil(initialAmountMax / 2),
+    Math.ceil(initialSwampAmountMin),
+    Math.ceil(initialSwampAmountMax),
     room,
     objects,
     result,
