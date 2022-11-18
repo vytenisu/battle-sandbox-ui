@@ -1,0 +1,7 @@
+.transition {
+  transition: all 700ms ease-in-out;
+}
+
+.quickTransition {
+  transition: all 100ms ease-in-out;
+}

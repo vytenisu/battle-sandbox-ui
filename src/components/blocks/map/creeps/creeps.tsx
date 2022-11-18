@@ -9,7 +9,7 @@ export const Creeps = ({objects}: ICreepsProps) => {
   return (
     <>
       {creeps.map(creep => (
-        <Creep key={`creep:${creep.pos.x}:${creep.pos.y}`} creep={creep} />
+        <Creep key={`creep:${creep.id}`} creep={creep} />
       ))}
     </>
   )

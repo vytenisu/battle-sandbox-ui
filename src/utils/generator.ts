@@ -1,5 +1,6 @@
 // TODO: move into separate module since it will be used from multiple places
 
+import {BODY_PART_MAX_HITS} from '../constants/screeps'
 import {IRoom, ITerrainMap} from '../hooks'
 import {IPosition} from '../types/commont'
 import {EObjectType, ICreep, IObject, ITerrainMask} from '../types/simplified-screeps'
@@ -108,12 +109,12 @@ const generateCreeps = (
 ): IObject[] => {
   let result = objects
 
-  times(ownAmount, () => {
-    result = generateCreep(true, room, result, terrain)
+  times(ownAmount, i => {
+    result = generateCreep(`cm${i}`, true, room, result, terrain)
   })
 
-  times(enemyAmount, () => {
-    result = generateCreep(false, room, result, terrain)
+  times(enemyAmount, i => {
+    result = generateCreep(`cr${i}`, false, room, result, terrain)
   })
 
   return result
@@ -281,6 +282,7 @@ const getTerrainConnectionAmount = (
 }
 
 const generateCreep = (
+  id: string,
   my: boolean,
   room: IRoom,
   objects: IObject[],
@@ -290,15 +292,14 @@ const generateCreep = (
   const body: BodyPartDefinition[] = []
 
   const availableBodyParts: BodyPartDefinition[] = [
-    {type: MOVE, hits: 100},
-    {type: ATTACK, hits: 100},
+    {type: MOVE, hits: BODY_PART_MAX_HITS},
+    {type: ATTACK, hits: BODY_PART_MAX_HITS},
   ]
 
   const bodyPartAmount = Random.getInteger(1, 50)
 
   for (let i = 0; i < bodyPartAmount; i++) {
     const randomBodyPart = Random.getArrayItem(availableBodyParts) as BodyPartDefinition
-    randomBodyPart.hits = Random.getInteger(0, randomBodyPart.hits)
     body.push(randomBodyPart)
   }
 
@@ -308,13 +309,31 @@ const generateCreep = (
     body[body.length - 1].hits = 1
   }
 
+  const hitsMax = body.length * BODY_PART_MAX_HITS
+  const hits = Random.getInteger(1, hitsMax)
+
+  let remainingHits = hits
+
+  for (let i = body.length - 1; i >= 0; i--) {
+    if (remainingHits > body[i].hits) {
+      remainingHits -= BODY_PART_MAX_HITS
+      body[i].hits = 0
+    } else {
+      body[i].hits -= remainingHits
+      break
+    }
+  }
+
   return [
     ...objects,
     {
+      id,
       objectType: EObjectType.CREEP,
       my,
       pos,
       body,
+      hitsMax,
+      hits,
     } as IObject,
   ]
 }
