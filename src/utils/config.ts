@@ -3,7 +3,7 @@ import qs from 'query-string'
 export interface IConfigQuery {
   mock?: string // Mock data
   quick?: string // Fast animations
-  clean?: string // No metrics
+  info?: string // Show metrics
 }
 
 export const isMockModeEnabled = () => {
@@ -16,7 +16,7 @@ export const isQuickAnimationEnabled = () => {
   return !query.quick
 }
 
-export const isCleanModeEnabled = () => {
+export const isInfoEnabled = () => {
   const query = qs.parse(window.location.search) as IConfigQuery
-  return query.clean
+  return query.info
 }

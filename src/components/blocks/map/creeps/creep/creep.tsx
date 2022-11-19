@@ -12,7 +12,7 @@ import {
   CREEP_STROKE,
   MAP_CELL_SIZE,
 } from '../../../../../constants/ui'
-import {isCleanModeEnabled, isQuickAnimationEnabled} from '../../../../../utils/config'
+import {isInfoEnabled, isQuickAnimationEnabled} from '../../../../../utils/config'
 import {ICreepProps} from './creep-interfaces'
 import s from './creep.module.css'
 
@@ -22,24 +22,24 @@ export const Creep = ({creep}: ICreepProps) => {
   const [linesVisible, setLinesVisible] = useState(false)
 
   const quick = isQuickAnimationEnabled()
-  const clean = isCleanModeEnabled()
+  const info = isInfoEnabled()
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
 
-    if (!clean) {
+    if (info) {
       timeout = setTimeout(() => {
         setLinesVisible(true)
       }, ANIMATION_DURATION)
     }
 
     return () => {
-      if (!clean) {
+      if (info) {
         clearTimeout(timeout)
         setLinesVisible(false)
       }
     }
-  }, [creep, setLinesVisible, clean])
+  }, [creep, setLinesVisible, info])
 
   const radius = MAP_CELL_SIZE / 2
 
