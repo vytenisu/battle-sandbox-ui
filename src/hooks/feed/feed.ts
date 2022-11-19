@@ -1,6 +1,6 @@
+import {getNewMap} from './../../services/socket'
 import {IFeedHook} from './feed-interfaces'
 import {useEffect} from 'react'
-import {generateRoom} from '../../utils/generator'
 
 const ROOM_WIDTH = 50
 const ROOM_HEIGHT = 50
@@ -20,9 +20,11 @@ const RANDOM_FEED_INTERVAL = 5000
 export const useFeed: IFeedHook = (cb, mock) => {
   useEffect(() => {
     if (mock) {
-      const feed = () =>
-        cb(
-          generateRoom({
+      let timeout: NodeJS.Timeout
+
+      const feed = () => {
+        timeout = setTimeout(async () => {
+          const map = await getNewMap({
             room: {width: ROOM_WIDTH, height: ROOM_HEIGHT},
             terrain: {
               initialWallMinAmount: TERRAIN_WALL_INITIAL_MIN,
@@ -40,15 +42,17 @@ export const useFeed: IFeedHook = (cb, mock) => {
               enemyMinAmount: CREEPS_MIN,
               enemyMaxAmount: CREEPS_MAX,
             },
-          }),
-        )
+          })
+
+          cb(map)
+          feed()
+        }, RANDOM_FEED_INTERVAL)
+      }
 
       feed()
 
-      const interval = setInterval(feed, RANDOM_FEED_INTERVAL)
-
       return () => {
-        clearInterval(interval)
+        clearTimeout(timeout)
       }
     } else {
       // TODO: NOT FINISHED

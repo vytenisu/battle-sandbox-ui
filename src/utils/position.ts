@@ -1,4 +1,4 @@
-import {IPosition} from '../types/commont'
+import {IPosition} from '../types/common'
 
 export class Position {
   public static fromRoomPosition(roomPosition: RoomPosition): IPosition {
