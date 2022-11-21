@@ -1,6 +1,7 @@
-import {getNewMap} from './../../services/socket'
+import {getNewMap} from '../../services/generator'
 import {IFeedHook} from './feed-interfaces'
 import {useEffect} from 'react'
+import {registerCallback} from '../../services/controller'
 
 const ROOM_WIDTH = 50
 const ROOM_HEIGHT = 50
@@ -55,7 +56,7 @@ export const useFeed: IFeedHook = (cb, mock) => {
         clearTimeout(timeout)
       }
     } else {
-      // TODO: NOT FINISHED
+      registerCallback(cb)
     }
   }, [cb, mock])
 }

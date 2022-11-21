@@ -1,4 +1,4 @@
-import {IFeed} from './../hooks/feed/feed-interfaces'
+import {IFeed} from '../hooks/feed/feed-interfaces'
 import {w3cwebsocket as SocketClient} from 'websocket'
 import {IRoomGenerationProps} from '../types/generator'
 
