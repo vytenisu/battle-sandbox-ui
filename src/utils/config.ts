@@ -15,8 +15,3 @@ export const isQuickAnimationEnabled = () => {
   const query = qs.parse(window.location.search) as IConfigQuery
   return !query.quick
 }
-
-export const isInfoEnabled = () => {
-  const query = qs.parse(window.location.search) as IConfigQuery
-  return query.info
-}

@@ -1,7 +1,8 @@
 import React from 'react'
+import {SUMMARY_TEXT_COLOR, SUMMARY_TEXT_OPACITY} from '../../../constants/ui'
 import {IMainTemplateProps} from './main-interfaces'
 
-export const MainTemplate: React.FC<IMainTemplateProps> = ({children}) => (
+export const MainTemplate: React.FC<IMainTemplateProps> = ({children, side}) => (
   <div
     style={{
       display: 'flex',
@@ -11,6 +12,7 @@ export const MainTemplate: React.FC<IMainTemplateProps> = ({children}) => (
       justifyContent: 'center',
     }}
   >
-    {children}
+    <div>{children}</div>
+    <div style={{paddingLeft: 20}}>{side}</div>
   </div>
 )

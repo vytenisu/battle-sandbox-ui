@@ -1,32 +1,22 @@
-import React, {useEffect, useState} from 'react'
-import {GENERATION_URL, INTERFACE_URL} from '../../../constants/socket'
-import {connectController} from '../../../services/controller'
-import {connectGenerator} from '../../../services/generator'
+import React, {useState} from 'react'
+import {IFeed, useFeed} from '../../../hooks'
 import {isMockModeEnabled} from '../../../utils/config'
+import {Info} from '../../blocks/info'
 import {Map} from '../../blocks/map'
 import {MainTemplate} from '../../layouts/main'
 
 export const Overview = () => {
-  const [socketReady, setSocketReady] = useState(false)
+  const mockMode = isMockModeEnabled()
+  const [map, setMap] = useState<IFeed | null>(null)
+  useFeed(setMap, mockMode)
 
-  useEffect(() => {
-    ;(async () => {
-      if (isMockModeEnabled()) {
-        await connectGenerator(GENERATION_URL)
-      } else {
-        await connectController(INTERFACE_URL)
-      }
-      setSocketReady(true)
-    })()
-  }, [])
-
-  if (!socketReady) {
+  if (!map) {
     return null
   }
 
   return (
-    <MainTemplate>
-      <Map />
+    <MainTemplate side={<Info objects={map.objects} />}>
+      <Map map={map} />
     </MainTemplate>
   )
 }

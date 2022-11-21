@@ -2,20 +2,14 @@ import React, {useState} from 'react'
 import {BACKGROUND_EMPTY_CELL, MAP_CELL_SIZE} from '../../../constants/ui'
 import {IFeed, useFeed} from '../../../hooks'
 import {isMockModeEnabled} from '../../../utils/config'
+import {Attacks} from './attacks'
 import {Creeps} from './creeps'
+import {IMapProps} from './map-interfaces'
 import {Swamps} from './swamps'
 import {Walls} from './walls'
 
-export const Map = () => {
-  const mockMode = isMockModeEnabled()
-  const [map, setMap] = useState<IFeed | null>(null)
-  useFeed(setMap, mockMode)
-
-  if (!map) {
-    return null
-  }
-
-  const {room, terrain, objects} = map
+export const Map = ({map}: IMapProps) => {
+  const {room, terrain, objects, commands = []} = map
 
   const width = room.width * MAP_CELL_SIZE
   const height = room.height * MAP_CELL_SIZE
@@ -32,6 +26,7 @@ export const Map = () => {
         <Walls terrain={terrain} />
         <Swamps terrain={terrain} />
         <Creeps objects={objects} />
+        <Attacks objects={objects} commands={commands} />
       </svg>
     </div>
   )
