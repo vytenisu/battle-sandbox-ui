@@ -4,7 +4,10 @@ export enum EObjectType {
 
 export type IObject = ICreep & {objectType: EObjectType}
 
-export type ICreep = Pick<Creep, 'id' | 'my' | 'pos' | 'body' | 'hitsMax' | 'hits'> & {
+export type ICreep = Pick<
+  Creep,
+  'id' | 'my' | 'pos' | 'body' | 'hitsMax' | 'hits' | 'fatigue' | 'ticksToLive'
+> & {
   objectType: EObjectType.CREEP
 }
 

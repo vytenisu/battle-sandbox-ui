@@ -16,7 +16,6 @@ export const connect = (url = usedUrl) =>
 
     if (usedUrl) {
       client = new SocketClient(usedUrl, 'map-generation')
-      client.onerror = retry
       client.onclose = retry
 
       client.onopen = function () {
