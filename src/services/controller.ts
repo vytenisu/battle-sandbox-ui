@@ -8,7 +8,7 @@ let usedUrl: string | null = null
 let connectResolve: (_: void) => void = () => {}
 let client: SocketClient
 
-export const connect = (url = usedUrl) =>
+export const connectController = (url = usedUrl) =>
   new Promise(resolve => {
     connectResolve = resolve
     usedUrl = url
@@ -17,7 +17,7 @@ export const connect = (url = usedUrl) =>
       client = new SocketClient(usedUrl, 'interface')
       client.onclose = retry
 
-      client.onopen = function () {
+      client.onopen = () => {
         connectResolve()
         connectResolve = () => {}
       }
@@ -32,7 +32,7 @@ export const connect = (url = usedUrl) =>
 
 const retry = () => {
   setTimeout(() => {
-    connect()
+    connectController()
   }, RETRY_DELAY)
 }
 

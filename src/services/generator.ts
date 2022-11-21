@@ -9,7 +9,7 @@ let currentResolve: (data: IFeed) => void = () => {}
 let connectResolve: (_: void) => void = () => {}
 let client: SocketClient
 
-export const connect = (url = usedUrl) =>
+export const connectGenerator = (url = usedUrl) =>
   new Promise(resolve => {
     connectResolve = resolve
     usedUrl = url
@@ -18,7 +18,7 @@ export const connect = (url = usedUrl) =>
       client = new SocketClient(usedUrl, 'map-generation')
       client.onclose = retry
 
-      client.onopen = function () {
+      client.onopen = () => {
         connectResolve()
         connectResolve = () => {}
       }
@@ -33,7 +33,7 @@ export const connect = (url = usedUrl) =>
 
 const retry = () => {
   setTimeout(() => {
-    connect()
+    connectGenerator()
   }, RETRY_DELAY)
 }
 
